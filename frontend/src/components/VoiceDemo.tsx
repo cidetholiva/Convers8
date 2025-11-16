@@ -228,31 +228,12 @@ export function VoiceDemo() {
               <div className="flex-1">
                 <div className="inline-block px-6 py-4 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 border border-violet-500/30">
                   <p className="text-gray-200">
-                    "Explain operant conditioning in simple terms."
+                    "Don't hesitate, let's conversate!"
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Waveform driven by real mic audio */}
-            <div className="flex items-center justify-center gap-1 my-12 h-24">
-              {[...Array(20)].map((_, i) => {
-                const base = 16;
-                const variance = 40 + i * 1.2;
-                const height = isRecording
-                  ? base + audioLevel * variance
-                  : base;
-
-                return (
-                  <motion.div
-                    key={i}
-                    className="w-1 bg-gradient-to-t from-cyan-500 to-teal-400 rounded-full"
-                    animate={{ height }}
-                    transition={{ duration: 0.08 }}
-                  />
-                );
-              })}
-            </div>
 
             {/* Microphone Button + state label */}
             <div className="flex flex-col items-center gap-3">
