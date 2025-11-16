@@ -156,3 +156,9 @@ async def sst_endpoint(file: UploadFile = File(...)):
         "answer": answer,
         "audio_base64": audio_base64,
     }
+
+# Add this at the very bottom of your entry.py file
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8787))  # Default to your 8787
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
