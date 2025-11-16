@@ -1,48 +1,36 @@
-from io import BytesIO #no need to update in pyproject.toml
-import requests
+from io import BytesIO
 from elevenlabs.client import ElevenLabs
+from dotenv import load_dotenv
+import os
+
+# Load .env so ELEVENLABS_API_KEY is available
+load_dotenv()
 
 
+def speech_to_text(audio_file: bytes) -> str:
+    """
+    Takes raw audio bytes and returns a transcript string
+    using ElevenLabs Scribe.
+    """
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    if not api_key:
+        raise RuntimeError("ELEVENLABS_API_KEY not set in environment")
 
-def speech_to_text(audio_file: bytes, server_env) -> str:
-    #audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
-    #response = requests.get(audio_url)
-    elevenlabs = ElevenLabs(api_key=server_env.ELEVENLABS_API_KEY)
-    audio_data = BytesIO(audio_file)  # Convert bytes to file-like object
-    #audio_data = BytesIO(response.content)
-    transcription_result = elevenlabs.speech_to_text.convert(
-         file=audio_data,
-         model_id="scribe_v1",
-         language_code="eng",
-    )
-    if isinstance(transcription_result, dict):
-        return transcription_result.get('text', '')
-    elif hasattr(transcription_result, 'text'):
-        return transcription_result.text
-    else:
-        # Fallback: convert to string
-        return str(transcription_result)
-    
-    
-def speech_to_text2(server_env) -> str:
-    audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
-    response = requests.get(audio_url)
-    elevenlabs = ElevenLabs(api_key=server_env.ELEVENLABS_API_KEY)
+    client = ElevenLabs(api_key=api_key)
+
     # Convert bytes to file-like object
-    audio_data = BytesIO(response.content)
-    # Transcribe - returns a JSON object
-    transcription_result = elevenlabs.speech_to_text.convert(
+    audio_data = BytesIO(audio_file)
+
+    result = client.speech_to_text.convert(
         file=audio_data,
         model_id="scribe_v1",
         language_code="eng",
     )
-    
-    # Extract just the text field
-    # The result is a dict with 'text', 'language_code', 'words', etc.
-    if isinstance(transcription_result, dict):
-        return transcription_result.get('text', '')
-    elif hasattr(transcription_result, 'text'):
-        return transcription_result.text
+
+    # Handle different possible return shapes
+    if isinstance(result, dict):
+        return result.get("text", "")
+    elif hasattr(result, "text"):
+        return result.text
     else:
-        # Fallback: convert to string
-        return str(transcription_result)
+        return str(result)
