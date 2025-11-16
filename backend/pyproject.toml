@@ -9,6 +9,8 @@ dependencies = [
     "requests",
     "elevenlabs",
     "fastapi",
+    "PyPDF2",
+    "python-multipart",
 ]
 
 [dependency-groups]

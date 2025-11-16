@@ -1,3 +1,4 @@
+import Logo from "../assets/Convers8.png";
 import { motion } from "motion/react";
 import { Mic, Volume2, Brain, BarChart3, Target } from "lucide-react";
 import { GlassCard } from "./GlassCard";

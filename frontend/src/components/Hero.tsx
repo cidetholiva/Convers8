@@ -1,24 +1,23 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { motion } from "motion/react";
 import { Upload, Mic } from "lucide-react";
 import { GlowingOrb } from "./GlowingOrb";
 
 export function Hero() {
   // ---------- FILE UPLOAD ----------
-  // used to "click" the hidden <input type="file" />
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleUploadClick = () => {
-    // when user clicks the pretty button, we trigger the hidden input
+    // when user clicks the button, we trigger the hidden input
     fileInputRef.current?.click();
   };
 
   const handleFilesSelected = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const files = event.target.files; //user input saved here!!!
+    const files = event.target.files; // user input saved here!!!
     if (!files || files.length === 0) return;
 
     const file = files[0];
@@ -28,93 +27,26 @@ export function Hero() {
     formData.append("file", file); // "file" is the field name backend will read
 
     try {
-      const res = await fetch("https://your-backend.com/upload-notes", {
+      //  ‼️BACKEND: replace this URL with your real upload endpoint
+      await fetch("https://your-backend.com/upload-notes", {
         method: "POST",
         body: formData, // <-- file is in the body
       });
 
-      if (!res.ok) {
-        console.error("Upload failed");
-        return;
-      }
-
-      // OPTIONAL: whatever your backend returns
-      const data = await res.json();
-      console.log("Upload success:", data);
-      // TODO: update UI (toast, message, etc) using `data`
-      // e.g. setUploadStatus(data.message)
+      // maybeee add??
+      // const data = await res.json();
+      // show toast / status UI with `data`
     } catch (err) {
       console.error("Error uploading file:", err);
     }
   };
 
-  // ---------- VOICE SESSION ----------
-  const [isRecording, setIsRecording] = useState(false);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-
-  const handleVoiceClick = async () => {
-    // if already recording, stop (this will trigger mediaRecorder.onstop)
-    if (isRecording) {
-      mediaRecorderRef.current?.stop();
-      setIsRecording(false);
-      return;
-    }
-
-    try {
-      // ask for mic permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      // collect audio chunks while recording
-      mediaRecorder.ondataavailable = (event: BlobEvent) => {
-        audioChunksRef.current.push(event.data); //audio data chunks saved here!!
-      };
-
-      // when recording stops, send the audio to backend
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm", //final audio file created here!!!
-        });
-
-        //  FRONTEND: send audio to your backend
-        const formData = new FormData();
-        formData.append("audio", audioBlob, "recording.webm");
-
-        try {
-          const res = await fetch("https://your-backend.com/voice-session", { //attach!!
-            method: "POST",
-            body: formData,
-          });
-
-          if (!res.ok) {
-            console.error("Voice session request failed");
-            return;
-          }
-
-          const data = await res.json();
-          console.log("Voice session response:", data);
-
-          // TODO:
-          // - `data.transcript` → show what user said
-          // - `data.answer` → show AI’s reply in the UI
-          // - `data.audioUrl` (if you return TTS) → new Audio(data.audioUrl).play()
-        } catch (err) {
-          console.error("Error sending audio:", err);
-        } finally {
-          // stop using the mic
-          stream.getTracks().forEach((track) => track.stop());
-        }
-      };
-
-      // start recording
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
+  // ---------- VOICE SESSION: just scroll to Voice Demo ----------
+  const handleVoiceClick = () => {
+    // scroll to <section id="voice-demo"> in VoiceDemo.tsx
+    const voiceSection = document.getElementById("voice-demo");
+    if (voiceSection) {
+      voiceSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -194,7 +126,7 @@ export function Hero() {
               type="file"
               multiple
               className="hidden"
-              onChange={handleFilesSelected} // ✅ sends file to backend
+              onChange={handleFilesSelected}
             />
 
             {/* Upload button */}
@@ -214,7 +146,7 @@ export function Hero() {
               </span>
             </motion.button>
 
-            {/* Voice Session button */}
+            {/* Voice Session button -> scroll to VoiceDemo */}
             <motion.button
               whileHover={{
                 scale: 1.05,
@@ -222,12 +154,12 @@ export function Hero() {
               }}
               whileTap={{ scale: 0.95 }}
               className="group relative px-8 py-4 rounded-full border-2 border-violet-500/50 bg-violet-500/10 backdrop-blur-sm overflow-hidden"
-              onClick={handleVoiceClick} // ✅ starts / stops recording & hits backend
+              onClick={handleVoiceClick}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="relative z-10 flex items-center gap-2">
                 <Mic className="w-5 h-5" />
-                {isRecording ? "Stop Voice Session" : "Start Voice Session"}
+                Start Voice Session
               </span>
             </motion.button>
           </motion.div>
