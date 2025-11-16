@@ -17,25 +17,26 @@ export function Hero() {
   const handleFilesSelected = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const files = event.target.files; // user input saved here!!!
+    const files = event.target.files;
     if (!files || files.length === 0) return;
 
     const file = files[0];
 
     // FRONTEND: build formData and send file to your backend
     const formData = new FormData();
-    formData.append("file", file); // "file" is the field name backend will read
+    formData.append("file", file);
 
     try {
-      //  ‼️BACKEND: replace this URL with your real upload endpoint
-      await fetch("https://your-backend.com/upload-notes", {
+      const res = await fetch("http://127.0.0.1:8787/upload-notes", {
         method: "POST",
-        body: formData, // <-- file is in the body
+        body: formData,
       });
 
-      // maybeee add??
-      // const data = await res.json();
-      // show toast / status UI with `data`
+      const data = await res.json();
+      console.log("Upload response:", data);
+
+      // later you can show a toast or set some state like:
+      // setHasUploaded(true);
     } catch (err) {
       console.error("Error uploading file:", err);
     }

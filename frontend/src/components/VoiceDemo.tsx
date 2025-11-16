@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Mic, Volume2 } from "lucide-react";
@@ -35,7 +37,6 @@ export function VoiceDemo() {
         const audioBlob = new Blob(chunks, { type: "audio/webm" });
 
         const formData = new FormData();
-        // changed to file istead of audio
         formData.append("file", audioBlob, "recording.webm");
 
         try {
@@ -67,6 +68,28 @@ export function VoiceDemo() {
 
           if ((data as any).answer) {
             setAiResponse((data as any).answer);
+          }
+
+          // 🔊 If backend sent TTS audio, play it
+          const audioBase64 = (data as any).audio_base64;
+          if (audioBase64) {
+            try {
+              const byteChars = atob(audioBase64);
+              const byteNumbers = new Array(byteChars.length);
+              for (let i = 0; i < byteChars.length; i++) {
+                byteNumbers[i] = byteChars.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray.buffer], { type: "audio/mpeg" });
+              const url = URL.createObjectURL(blob);
+
+              const audio = new Audio(url);
+              audio.play().catch((err) => {
+                console.error("Error playing TTS audio:", err);
+              });
+            } catch (err) {
+              console.error("Error decoding/playing TTS audio:", err);
+            }
           }
         } catch (err) {
           console.error("Error sending audio to STT endpoint:", err);
