@@ -1,12 +1,12 @@
 import { motion } from "motion/react";
-import { Sparkles, Zap, Cloud, Code, Palette } from "lucide-react";
+import { Sparkles, Zap, Code, Palette, Worm } from "lucide-react";
 
 export function TechStack() {
   const technologies = [
     { name: "Google Gemini", icon: Sparkles, color: "from-blue-500 to-cyan-500" },
     { name: "Eleven Labs", icon: Zap, color: "from-violet-500 to-purple-500" },
-    { name: "Cloudflare Workers", icon: Cloud, color: "from-orange-500 to-amber-500" },
-    { name: "Next.js", icon: Code, color: "from-gray-600 to-gray-800" },
+    { name: "Python FastAPI", icon: Worm, color: "from-teal-500 to-teal-700" },
+    { name: "Next.js", icon: Code , color: "from-gray-600 to-gray-800" },
     { name: "Tailwind", icon: Palette, color: "from-cyan-500 to-teal-500" }
   ];
 

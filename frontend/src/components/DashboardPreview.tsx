@@ -4,9 +4,9 @@ import { GlassCard } from "./GlassCard";
 
 export function DashboardPreview() {
   const recentSessions = [
-    { topic: "Operant Conditioning", mastery: 85, duration: "12 min" },
-    { topic: "Quantum Entanglement", mastery: 72, duration: "18 min" },
-    { topic: "Keynesian Economics", mastery: 91, duration: "15 min" }
+    { topic: "Python", mastery: 85, duration: "12 min" },
+    { topic: "DSA - Dynamic Programing", mastery: 72, duration: "18 min" },
+    { topic: "Bussiness Analytics", mastery: 91, duration: "15 min" }
   ];
 
   return (
