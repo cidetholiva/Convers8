@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "webtypy>=0.1.7",
+    "requests",
+    "elevenlabs",
+    "fastapi",
 ]
 
 [dependency-groups]

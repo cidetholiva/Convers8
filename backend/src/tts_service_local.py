@@ -4,6 +4,7 @@ from elevenlabs.play import play
 import os
 
 def text_to_speech(text: str) -> bytes:
+    
     elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
     audio = elevenlabs.text_to_speech.convert(
         text=text,
