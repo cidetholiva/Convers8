@@ -10,12 +10,12 @@ from elevenlabs.client import ElevenLabs
 # Load environment variables
 # ---------------------------
 # Path to backend/src (this file's folder)
-BASE_DIR = Path(__file__).resolve().parent
+#BASE_DIR = Path(__file__).resolve().parent
 
 # .env is in backend/src/.env
-env_path = BASE_DIR / ".env"
-load_dotenv(env_path)
-
+#env_path = BASE_DIR / ".env"
+#load_dotenv(env_path)
+load_dotenv()
 ELEVEN_API_KEY = os.environ.get("ELEVENLABS_API_KEY")
 print("DEBUG: Loaded ELEVENLABS_API_KEY:", ELEVEN_API_KEY)
 
