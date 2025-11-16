@@ -4,7 +4,7 @@ from elevenlabs.client import ElevenLabs
 
 
 
-def speech_to_text(server_env) -> str:
+def speech_to_text(audio_file: bytes, server_env) -> str:
     audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
     response = requests.get(audio_url)
     elevenlabs = ElevenLabs(api_key=server_env.ELEVENLABS_API_KEY)
