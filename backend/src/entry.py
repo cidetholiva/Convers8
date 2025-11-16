@@ -19,16 +19,24 @@ async def hello():
 async def test(req: Request):
     import sst_service_local as sst
     env = req.scope["env"]
-    transcription = sst.speech_to_text(env)
+    transcription = sst.speech_to_text2(env)
     # message = env.ELEVENLABS_API_KEY
     # return {"message": message}
     return transcription
 
-@app.get("tts")
+@app.get("/tts")
 async def test(req:Request):
+    import tts_service_local as tts
     env = req.scope["env"]
-    message = env.ELEVENLABS_API_KEY
-    return {"message" : message}
+    audio_bytes = tts.text_to_speech("HHHHIIIII", env)
+    
+    return Response(
+        content=audio_bytes,
+        media_type="audio/mpeg"
+    )
+    # message = env.ELEVENLABS_API_KEY
+    # return {"message" : message}
+
 
     
 

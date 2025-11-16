@@ -3,9 +3,8 @@ from elevenlabs.client import ElevenLabs
 from elevenlabs.play import play
 import os
 
-def text_to_speech(text: str) -> bytes:
-    
-    elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+def text_to_speech(text: str, server_env) -> bytes:
+    elevenlabs = ElevenLabs(api_key=server_env.ELEVENLABS_API_KEY)
     audio = elevenlabs.text_to_speech.convert(
         text=text,
         voice_id="JBFqnCBsd6RMkjVDRZzb",
